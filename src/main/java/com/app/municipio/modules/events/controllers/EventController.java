@@ -43,26 +43,28 @@ public class EventController {
 
     @Operation(summary = "Crear evento")
     @PostMapping("/create")
-    public ResponseEntity<ApResponse> create(@Valid @RequestBody CreateEventDto dto) {
-        try {
-            var created = eventService.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-        .body(Response.success("Event created successfully", created).getBody());
-        } catch (Exception e) {
-            return Response.badRequest("Error creating event: " + e.getMessage());
-        }
+public ResponseEntity<ApResponse> create(@Valid @RequestBody CreateEventDto dto) {
+    try {
+        var created = eventService.create(dto); // ahora retorna EventResponseDto
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Response.success("Event created successfully", created).getBody());
+    } catch (Exception e) {
+        return Response.badRequest("Error creating event: " + e.getMessage());
     }
+}
+
 
     @Operation(summary = "Actualizar evento")
     @PutMapping("/update/{id}")
-    public ResponseEntity<ApResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateEventDto dto) {
-        try {
-            var updated = eventService.update(id, dto);
-            return Response.success("Event updated successfully", updated);
-        } catch (Exception e) {
-            return Response.badRequest("Error updating event: " + e.getMessage());
-        }
+public ResponseEntity<ApResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateEventDto dto) {
+    try {
+        var updated = eventService.update(id, dto); // ahora retorna EventResponseDto
+        return Response.success("Event updated successfully", updated);
+    } catch (Exception e) {
+        return Response.badRequest("Error updating event: " + e.getMessage());
     }
+}
+
 
     @Operation(summary = "Eliminar evento")
     @DeleteMapping("/delete/{id}")

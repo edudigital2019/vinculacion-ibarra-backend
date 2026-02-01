@@ -43,95 +43,98 @@ private Event getEntityById(Long id) {
 }
 
     @Transactional
-    public Event create(CreateEventDto dto) {
-        validateDates(dto.getDateStart(), dto.getDateEnd());
+public EventResponseDto create(CreateEventDto dto) {
+    validateDates(dto.getDateStart(), dto.getDateEnd());
 
-        Event event = Event.builder()
-                .name(dto.getName())
-                .type(dto.getType())
-                .dateStart(dto.getDateStart())
-                .dateEnd(dto.getDateEnd())
-                .description(dto.getDescription())
-                .direction(dto.getDirection())
-                .location(dto.getLocation())
-                .link(dto.getLink())
-                .state(dto.getState() != null ? dto.getState() : Boolean.TRUE)
-                .build();
+    Event event = Event.builder()
+            .name(dto.getName())
+            .type(dto.getType())
+            .dateStart(dto.getDateStart())
+            .dateEnd(dto.getDateEnd())
+            .description(dto.getDescription())
+            .direction(dto.getDirection())
+            .location(dto.getLocation())
+            .link(dto.getLink())
+            .state(dto.getState() != null ? dto.getState() : Boolean.TRUE)
+            .build();
 
-        // Contactos
-        if (dto.getContact() != null) {
-            for (CreateEventDto.ContactDto c : dto.getContact()) {
-                EventContact contact = EventContact.builder()
-                        .type(c.getType())
-                        .description(c.getDescription())
-                        .event(event)
-                        .build();
-                event.getContact().add(contact);
-            }
+    // Contactos
+    if (dto.getContact() != null) {
+        for (CreateEventDto.ContactDto c : dto.getContact()) {
+            EventContact contact = EventContact.builder()
+                    .type(c.getType())
+                    .description(c.getDescription())
+                    .event(event)
+                    .build();
+            event.getContact().add(contact);
         }
-
-        // Servicios
-        if (dto.getServices() != null) {
-            for (String s : dto.getServices()) {
-                EventServiceEntity service = EventServiceEntity.builder()
-                        .service(s)
-                        .event(event)
-                        .build();
-                event.getServices().add(service);
-            }
-        }
-
-        return eventRepository.save(event);
     }
 
-    @Transactional
-    public Event update(Long id, UpdateEventDto dto) {
-        Event event =  getEntityById(id);
-
-        if (dto.getName() != null) event.setName(dto.getName());
-        if (dto.getType() != null) event.setType(dto.getType());
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getDirection() != null) event.setDirection(dto.getDirection());
-        if (dto.getLocation() != null) event.setLocation(dto.getLocation());
-        if (dto.getLink() != null) event.setLink(dto.getLink());
-        if (dto.getState() != null) event.setState(dto.getState());
-
-        LocalDate finalStart = dto.getDateStart() != null ? dto.getDateStart() : event.getDateStart();
-        LocalDate finalEnd = dto.getDateEnd() != null ? dto.getDateEnd() : event.getDateEnd();
-        validateDates(finalStart, finalEnd);
-
-        if (dto.getDateStart() != null) event.setDateStart(dto.getDateStart());
-        if (dto.getDateEnd() != null) event.setDateEnd(dto.getDateEnd());
-
-        // Reemplazar contactos si vienen
-        if (dto.getContact() != null) {
-            event.getContact().clear();
-            for (CreateEventDto.ContactDto c : dto.getContact()) {
-                EventContact contact = EventContact.builder()
-                        .type(c.getType())
-                        .description(c.getDescription())
-                        .event(event)
-                        .build();
-                event.getContact().add(contact);
-            }
+    // Servicios
+    if (dto.getServices() != null) {
+        for (String s : dto.getServices()) {
+            EventServiceEntity service = EventServiceEntity.builder()
+                    .service(s)
+                    .event(event)
+                    .build();
+            event.getServices().add(service);
         }
-
-        // Reemplazar servicios si vienen
-        if (dto.getServices() != null) {
-            event.getServices().clear();
-            for (String s : dto.getServices()) {
-                EventServiceEntity service = EventServiceEntity.builder()
-                        .service(s)
-                        .event(event)
-                        .build();
-                event.getServices().add(service);
-            }
-        }
-
-        return eventRepository.save(event);
     }
 
-    public void delete(Long id) {
+    Event saved = eventRepository.save(event);
+    return EventMapper.toDto(saved);
+}
+
+@Transactional
+public EventResponseDto update(Long id, UpdateEventDto dto) {
+    Event event = getEntityById(id);
+
+    if (dto.getName() != null) event.setName(dto.getName());
+    if (dto.getType() != null) event.setType(dto.getType());
+    if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+    if (dto.getDirection() != null) event.setDirection(dto.getDirection());
+    if (dto.getLocation() != null) event.setLocation(dto.getLocation());
+    if (dto.getLink() != null) event.setLink(dto.getLink());
+    if (dto.getState() != null) event.setState(dto.getState());
+
+    var finalStart = dto.getDateStart() != null ? dto.getDateStart() : event.getDateStart();
+    var finalEnd = dto.getDateEnd() != null ? dto.getDateEnd() : event.getDateEnd();
+    validateDates(finalStart, finalEnd);
+
+    if (dto.getDateStart() != null) event.setDateStart(dto.getDateStart());
+    if (dto.getDateEnd() != null) event.setDateEnd(dto.getDateEnd());
+
+    // Reemplazar contactos si vienen
+    if (dto.getContact() != null) {
+        event.getContact().clear();
+        for (CreateEventDto.ContactDto c : dto.getContact()) {
+            EventContact contact = EventContact.builder()
+                    .type(c.getType())
+                    .description(c.getDescription())
+                    .event(event)
+                    .build();
+            event.getContact().add(contact);
+        }
+    }
+
+    // Reemplazar servicios si vienen
+    if (dto.getServices() != null) {
+        event.getServices().clear();
+        for (String s : dto.getServices()) {
+            EventServiceEntity service = EventServiceEntity.builder()
+                    .service(s)
+                    .event(event)
+                    .build();
+            event.getServices().add(service);
+        }
+    }
+
+    Event saved = eventRepository.save(event);
+    return EventMapper.toDto(saved);
+}
+
+
+        public void delete(Long id) {
         Event event = getEntityById(id);
         eventRepository.delete(event);
     }
