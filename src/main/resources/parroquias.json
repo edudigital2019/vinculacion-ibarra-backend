@@ -1,0 +1,42 @@
+{
+  "Urbanas": [
+    {
+      "nombre": "San Francisco"
+    },
+    {
+      "nombre": "El Sagrario"
+    },
+    {
+      "nombre": "Caranqui"
+    },
+    {
+      "nombre": "Alpachaca"
+    },
+    {
+      "nombre": "Priorato"
+    }
+  ],
+  "Rurales": [
+    {
+      "nombre": "San Antonio de Ibarra"
+    },
+    {
+      "nombre": "La Esperanza"
+    },
+    {
+      "nombre": "Angochagua"
+    },
+    {
+      "nombre": "Ambuquí"
+    },
+    {
+      "nombre": "Salinas"
+    },
+    {
+      "nombre": "La Carolina"
+    },
+    {
+      "nombre": "Lita"
+    }
+  ]
+}
