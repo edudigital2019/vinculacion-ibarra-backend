@@ -23,6 +23,9 @@ public class EventResponseDto {
     private String link;
     private Boolean state;
 
+    // NUEVO: imágenes relacionadas al evento
+    private List<ImageDto> images;
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -30,5 +33,15 @@ public class EventResponseDto {
     public static class ContactDto {
         private String type;
         private String description;
+    }
+
+    // NUEVO DTO para imágenes
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ImageDto {
+        private String name; // ej: banner, galeria1
+        private String url;  // URL de Cloudinary
     }
 }
