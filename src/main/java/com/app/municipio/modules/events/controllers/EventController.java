@@ -32,15 +32,24 @@ public class EventController {
     private final EventService eventService;
     private final ObjectMapper objectMapper;
 
-    @Operation(summary = "Listar eventos")
-    @GetMapping
-    public ResponseEntity<ApResponse> listAll() {
-        try {
-            return Response.success("Events listed successfully", eventService.listAll());
-        } catch (Exception e) {
-            return Response.badRequest("Error listing events: " + e.getMessage());
-        }
+@Operation(summary = "Listar eventos")
+@GetMapping
+public ResponseEntity<ApResponse> listAll() {
+    try {
+        var events = eventService.listAll();
+
+        return Response.successWithTotal(
+                "Events listed successfully",
+                events,
+                events.size()
+        );
+
+    } catch (Exception e) {
+        return Response.badRequest("Error listing events: " + e.getMessage());
     }
+}
+
+
 
     @Operation(summary = "Obtener evento por id")
     @GetMapping("/{id}")

@@ -23,7 +23,7 @@ public class EventResponseDto {
     private String link;
     private Boolean state;
 
-    // NUEVO: imágenes relacionadas al evento
+    // Imágenes relacionadas al evento
     private List<ImageDto> images;
 
     @Data
@@ -35,7 +35,7 @@ public class EventResponseDto {
         private String description;
     }
 
-    // NUEVO DTO para imágenes
+    //  DTO para imágenes
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

@@ -17,7 +17,6 @@ public class EventServiceEntity {
     @Column(name = "id_event_service")
     private Long id;
 
-    // Un "service" del JSON: "Parqueadero gratuito"
     @Column(nullable = false, length = 120)
     private String service;
 

@@ -28,7 +28,7 @@ public class EventMapper {
                 .map(s -> s.getService())
                 .toList();
 
-        // ✅ NUEVO: imágenes (name + url)
+        // NUEVO: imágenes (name + url)
         List<EventResponseDto.ImageDto> images = event.getImages() == null
                 ? Collections.emptyList()
                 : event.getImages().stream()

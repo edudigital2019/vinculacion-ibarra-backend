@@ -13,11 +13,17 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     //  Para listar: trae contactos y servicios
-    @Query("SELECT DISTINCT e FROM Event e " +
-        "LEFT JOIN FETCH e.contact " +
-        "LEFT JOIN FETCH e.services " +
-        "LEFT JOIN FETCH e.images")
+    @Query("""
+    SELECT DISTINCT e
+    FROM Event e
+    LEFT JOIN FETCH e.contact
+    LEFT JOIN FETCH e.services
+    LEFT JOIN FETCH e.images
+    WHERE e.state = true
+      AND CURRENT_DATE BETWEEN e.dateStart AND e.dateEnd
+""")
 List<Event> findAllWithRelations();
+
 
     //  Para buscar por id: trae contactos y servicios
     @Query("SELECT e FROM Event e " +
